@@ -1,29 +1,57 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head></head><body>
+<html>
 
+<head>
+  <title>Personalization</title>
+</head>
 
-  
+<body>
+  <script>
+    function setCookie(name, value, days) {
+      let expires = "";
+      if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
 
+    function getCookie(key) {
+      let value = ''
+      document.cookie.split(';').forEach((e) => {
+        if (e.includes(key)) {
+          value = e.split('=')[1]
+        }
+      })
+      return value
+    }
 
+    function eraseCookie(name) {
+      document.cookie = name + '=;expires=Thu, 01 Jan 1970; path=/';
+    }
 
-  
+    function buildWelcome() {
+      const fullName = getCookie('fullName');
+      if (fullName === "" || fullName === null) {
+        let newDiv = document.createElement('div');
+        newDiv.innerHTML = 'Welcome!';
+        document.body.appendChild(newDiv);
+      } else {
+        let newDiv = document.createElement('div');
+        newDiv.innerHTML = 'Welcome, ' + fullName + '!';
+        document.body.appendChild(newDiv);
+      }
+    }
+
+    function handleButtonClick() {
+      setCookie('fullName', document.getElementById('fullName').value, 10);
+    }
+
+    buildWelcome();
+  </script>
   <label for="fullName">Full Name: </label>
-  
-  Save
+  <input id="fullName"></input>
+  <button id="fullNameButton" onclick="handleButtonClick()">Save</button>
+</body>
 
-
-<script type="module" src="https://s.brightspace.com/lib/bsi/20.23.9-217/unbundled/mathjax.js"></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() {
-					if (document.querySelector('math') || /\$\$|\\\(|\\\[|\\begin{|\\ref{|\\eqref{/.test(document.body.innerHTML)) {
-						document.querySelectorAll('mspace[linebreak="newline"]').forEach(elm => {
-							elm.setAttribute('style', 'display: block; height: 0.5rem;');
-						});
-
-						window.D2L.MathJax.loadMathJax({
-							'outputScale': 1.5,
-							'renderLatex': true
-						});
-					}
-				});</script><script type="module" src="https://s.brightspace.com/lib/bsi/20.23.9-217/unbundled/prism.js"></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() {
-					document.querySelectorAll('.d2l-code').forEach(code => {
-						window.D2L.Prism.formatCodeElement(code);
-					});
-				});</script></body></html>
+</html>
